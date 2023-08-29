@@ -57,8 +57,5 @@ Windows Registry Editor Version 5.00
 "CachedLanguageName"="@Winlangdb.dll,-1091"
 "0807:00000807"=dword:00000001
 
-[HKEY_USERS\Replace\Control Panel\International\🌎🌏🌍]
-"Calendar"="Gregorian"
-
 [HKEY_USERS\Replace\Keyboard Layout\Preload]
 "1"="00000807"
