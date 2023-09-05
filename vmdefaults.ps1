@@ -8,9 +8,9 @@ Configuration vmdefaults {
         LogPath = 'C:\temp\snmpfeature.log'
     }
     Script 'Computer_Locale'{
-        GetScript = {@{Result = (Get-WinUILanguageOverride).name}}
-        SetScript = {Set-WinUILanguageOverride -Language 'de-CH'}
-        TestScript = { 'de-CH' -eq (Get-WinUILanguageOverride).name}
+        GetScript = {@{Result = (Get-WinSystemLocale).name}}
+        SetScript = { Set-WinSystemLocale -SystemLocale 'de-CH' }
+        TestScript = { 'de-CH' -eq (Get-WinSystemLocale).name}
     }
     
     Script 'Computer_TimeZone'{
