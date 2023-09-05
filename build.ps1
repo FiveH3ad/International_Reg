@@ -10,6 +10,10 @@ if(Test-Path BechtleSchweizWindowsVirtualMachineConfiguration.zip){
     git rm BechtleSchweizWindowsVirtualMachineConfiguration.zip -f 
 }
 
+if(Test-Path policy){
+    Remove-Item Policy -Recurse -Force
+}
+
 . .\vmdefaults.ps1
 
 $params = @{
