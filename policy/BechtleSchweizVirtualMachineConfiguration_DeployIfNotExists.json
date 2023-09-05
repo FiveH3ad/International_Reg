@@ -1,9 +1,9 @@
 ﻿{
     "properties": {
-        "displayName": "Bechtle Schweiz Default Azure Windows Virtual Machine Settings",
+        "displayName": "Bechtle Schweiz Default Windows Virtual Machine Congfiguration Policy",
         "policyType": "Custom",
         "mode": "Indexed",
-        "description": "Sets Default Virtual Machine Settings with Powershell DSC",
+        "description": "Sets Default Regional Settings and installs SNMP Service",
         "metadata": {
             "category": "Guest Configuration",
             "version": "1.0.0",
@@ -317,7 +317,7 @@
                                                 "contentType": "Custom",
                                                 "contentUri": "https://github.com/FiveH3ad/International_Reg/raw/main/BechtleSchweizVirtualMachineConfiguration.zip",
                                                 "contentHash": "CDB18E3FCB4476C6695069D79D90111A2571652230A96B64CE351226AAC39096",
-                                                "assignmentType": "ApplyandAutocorrect"
+                                                "assignmentType": "Applyandautocorrect"
                                             }
                                         }
                                     },
@@ -334,7 +334,7 @@
                                                 "contentType": "Custom",
                                                 "contentUri": "https://github.com/FiveH3ad/International_Reg/raw/main/BechtleSchweizVirtualMachineConfiguration.zip",
                                                 "contentHash": "CDB18E3FCB4476C6695069D79D90111A2571652230A96B64CE351226AAC39096",
-                                                "assignmentType": "ApplyandAutocorrect"
+                                                "assignmentType": "Applyandautocorrect"
                                             }
                                         }
                                     },
@@ -351,7 +351,7 @@
                                                 "contentType": "Custom",
                                                 "contentUri": "https://github.com/FiveH3ad/International_Reg/raw/main/BechtleSchweizVirtualMachineConfiguration.zip",
                                                 "contentHash": "CDB18E3FCB4476C6695069D79D90111A2571652230A96B64CE351226AAC39096",
-                                                "assignmentType": "ApplyandAutocorrect"
+                                                "assignmentType": "Applyandautocorrect"
                                             }
                                         }
                                     }
@@ -363,5 +363,5 @@
             }
         }
     },
-    "name": "996846fa-a2cf-47e4-ac3f-f7f5b4b510db"
+    "name": "f7216fd2-5908-482e-ae32-87f18db22626"
 }

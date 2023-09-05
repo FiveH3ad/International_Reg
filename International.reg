@@ -41,6 +41,7 @@ Windows Registry Editor Version 5.00
 "iTime"="1"
 "iTimePrefix"="0"
 "iTLZero"="1"
+"sCountry"="Switzerland"
 
 [HKEY_USERS\Replace\Control Panel\International\Geo]
 "Nation"="223"

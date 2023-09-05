@@ -63,6 +63,9 @@ Configuration vmdefaults {
                 
                 $NTuserDatPath = Join-Path $profilepath "NTUSER.DAT"
 
+                Write-Host $UserRegPath
+                Write-Host $NTuserDatPath
+
                 # Check if Hive is loaded or not
                 if(Test-Path $UserRegPath){
                     $PersonalRegFile = (Split-Path $RegFile -Parent) + "$username" + '.reg'
@@ -106,9 +109,10 @@ Configuration vmdefaults {
             $attempts = 0
             while (!$unloaded -and ($attempts -le 5)) {
                 [gc]::Collect() # necessary call to be able to unload registry hive
-                & REG UNLOAD HKU\Replace > $null 2>&1
+                & REG UNLOAD HKLM\Default > $null 2>&1
                 $unloaded = $?
                 $attempts += 1
+                Start-Sleep -Seconds 5
             }
             'de-CH' -eq $LocaleValue.LocaleName
         }
