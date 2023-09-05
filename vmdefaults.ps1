@@ -1,27 +1,43 @@
 Configuration vmdefaults {
     Import-DscResource -Name 'WindowsFeature','Script' -ModuleName 'PSDscResources'
 
-    Import-DscResource -Name 'SystemLocale','TimeZone' -ModuleName 'ComputerManagementDsc'
-
     WindowsFeature 'SNMPFeature' {
         Name = 'SNMP-Service'
         Ensure = 'Present'
         IncludeAllSubFeature = $true
         LogPath = 'C:\temp\snmpfeature.log'
     }
-
-    SystemLocale 'SystemLocale' {
-            IsSingleInstance = 'Yes'
-            SystemLocale     = 'de-CH'
+    Script 'Computer_Locale'{
+        GetScript = {@{Result = (Get-WinUILanguageOverride).name}}
+        SetScript = {Set-WinUILanguageOverride -Language 'de-CH'}
+        TestScript = { 'de-CH' -eq (Get-WinUILanguageOverride).name}
     }
-
-    TimeZone 'TimeZone' {
-            IsSingleInstance = 'Yes'
-            TimeZone         = 'W. Europe Standard Time'
+    
+    Script 'Computer_TimeZone'{
+        GetScript = {@{ Result = (Get-TimeZone).ID}}
+        SetScript = { Set-TimeZone -Id 'W. Europe Standard Time' }
+        TestScript = { 'W. Europe Standard Time' -eq (Get-TimeZone).ID }
     }
-
+    
     Script 'Culture' {
-        GetScript = {@{ Result = Get-Culture}}
+        GetScript = {
+            $RegFilePath = 'C:\Users\Default\NTUSER.DAT'
+            $RegLoadPath = 'HKLM\Default'
+
+            & REG LOAD $RegLoadPath $RegFilePath > $null 2>&1
+
+            $LocaleValue = Get-ItemProperty -Path 'REGISTRY::HKEY_LOCAL_MACHINE\Default\Control Panel\International' -Name 'LocaleName'
+
+            $unloaded = $false
+            $attempts = 0
+            while (!$unloaded -and ($attempts -le 5)) {
+                [gc]::Collect() # necessary call to be able to unload registry hive
+                & REG UNLOAD HKU\Replace > $null 2>&1
+                $unloaded = $?
+                $attempts += 1
+            }
+            @{ Result = $LocaleValue }
+        } 
         SetScript = {
             # Parameter
             $RegFileURL = "https://raw.githubusercontent.com/FiveH3ad/International_Reg/main/International.reg"
@@ -31,12 +47,12 @@ Configuration vmdefaults {
             $webclient = New-Object System.Net.WebClient
             $webclient.DownloadFile($RegFileURL,$RegFile)
 
-            $userprofiles = Get-Childitem C:\Users -Force -Exclude 'Default User','All Users','Public' -Directory | select name, fullname
+            $userprofiles = Get-Childitem C:\Users -Force -Exclude 'Default User','All Users','Public' -Directory | Select-Object name, fullname
             foreach($profile in $userprofiles){
                 $username = $profile.name
                 $profilepath = $profile.fullname
                 if($username -ne 'Default'){
-                    $usersid = Get-LocalUser $username | select sid 
+                    $usersid = Get-LocalUser $username | Select-Object sid 
                     $usersid = $usersid.SID.Value
                 }
                 else{
@@ -78,9 +94,25 @@ Configuration vmdefaults {
                 }
             }
         }
-        TestScript = { 'de-CH' -eq (Get-Culture).Name }
-    }
+        TestScript = { 
+            $RegFilePath = 'C:\Users\Default\NTUSER.DAT'
+            $RegLoadPath = 'HKLM\Default'
 
+            & REG LOAD $RegLoadPath $RegFilePath > $null 2>&1
+
+            $LocaleValue = Get-ItemProperty -Path 'REGISTRY::HKEY_LOCAL_MACHINE\Default\Control Panel\International' -Name 'LocaleName'
+
+            $unloaded = $false
+            $attempts = 0
+            while (!$unloaded -and ($attempts -le 5)) {
+                [gc]::Collect() # necessary call to be able to unload registry hive
+                & REG UNLOAD HKU\Replace > $null 2>&1
+                $unloaded = $?
+                $attempts += 1
+            }
+            'de-CH' -eq $LocaleValue.LocaleName
+        }
+    }
 }
 
 vmdefaults
