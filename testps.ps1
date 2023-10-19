@@ -4,7 +4,7 @@ $vms = get-azvm
 
 foreach($vm in $vms)
 
-if(test-path 'C:\DefaultVMSettings\defaultsettings.txt'){
+if(-not(test-path 'C:\DefaultVMSettings\defaultsettings.txt')){
 
 Set-WinSystemLocale 'de-CH'
 Set-TimeZone -id 'W. Europe Standard Time'
