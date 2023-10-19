@@ -1,9 +1,3 @@
-connect-azaccount -identity
-
-$vms = get-azvm
-
-foreach($vm in $vms)
-
 if(-not(test-path 'C:\DefaultVMSettings\defaultsettings.txt')){
 
 Set-WinSystemLocale 'de-CH'
